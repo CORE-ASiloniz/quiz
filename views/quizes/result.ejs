@@ -1,6 +1,2 @@
-
-		<br>		
-		<p>La respuesta es <strong> <%= answer %> </strong> es <%= result %></p>
-		<p>
-		<a href="/quizes/question"> Intentelo otra vez mamónazo </a>
-		</p>
+		<p>La respuesta <strong><%= answer %></strong> es <%= result %>.</p>
+		<p><a href="/quizes/<%= quiz.id %>?answer=<%= answer %>">Inténtelo otra vez</a></p>
