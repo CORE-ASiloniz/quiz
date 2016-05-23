@@ -55,3 +55,25 @@ exports.author = function(req, res, next){
 	res.render('quizes/author');
 };
 
+//GET /quizes/new
+exports.new = function(req, res, next){
+	var quiz = models.Quiz.build({question: "", answer: ""});
+	res.render('quizes/new',{quiz: quiz});
+};
+
+//POST /quizes/create
+
+exports.create = function(req, res, next) {
+	var quiz = models.Quiz.build({question: req.body.quiz.question, answer: req.body.quiz.answer});
+
+	// Guarda en DB los campos pregunta y respuesta de quiz
+	quiz.save({fields: ['question', 'answer']}).then(function(quiz) {
+		req.flash('success', 'Quiz creado con éxito');
+		res.redirect('/quizes');	// res.redirect:
+	}).catch(function(error) {		// redirección HTTP a lista de preguntas
+		req.flash('error','Error al crear un Quiz'+error.message);
+		next(error);
+	}); 
+}; 
+
+
