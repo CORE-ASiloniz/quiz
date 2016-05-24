@@ -11,6 +11,15 @@ exports.load = function(req, res, next, quizId){
 		}
 	}).catch(function(error){next(error); });
 };
+// DELETE /quizzes/:id
+exports.destroy = function(req, res, next) {
+	req.quiz.destroy().then(function() {
+		req.flash('success', 'Quiz borrado con éxito.');
+		res.redirect('/quizes');
+	}).catch(function(error) {
+		req.flash('error', 'Error al editar el Quiz: ' + error.message);
+	});
+};
 
 
 // GET /quizes
