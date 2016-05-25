@@ -2,7 +2,7 @@ var models = require('../models');
 var Sequelize = require('sequelize');
 
 exports.load = function(req, res, next, quizId){
-	models.Quiz.findById(quizId).then(function(quiz){
+	models.Quiz.findById(quizId, { include: [models.Comment] }).then(function(quiz) {
 		if(quiz){
 			req.quiz = quiz;
 			next();
@@ -98,7 +98,7 @@ exports.create = function(req, res, next) {
 	var quiz = models.Quiz.build({question: req.body.quiz.question, answer: req.body.quiz.answer});
 
 	// Guarda en DB los campos pregunta y respuesta de quiz
-	quiz.save({fields: ['question', 'answer']}).then(function(quiz) {
+	quiz.save({fields: ["question", "answer"]}).then(function(quiz) {
 
 		req.flash('success', 'Quiz creado con éxito');
 		res.redirect('/quizes');	// res.redirect:
