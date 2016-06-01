@@ -1,8 +1,7 @@
-<p>Añadir nuevo comentario:</p>
-
+<p> Añadir nuevo comentario: </p>
 <p>
-	<form method="POST" action="/quizes/<%= quiz.id %>/comments/">
-		<input type="text" id="comment" name="comment[text]" value="" placeholder="Comentario"/><p>
-		<button type="submit">Enviar</button>
+	<form method="POST" action="/quizes/<%=quiz.id%>/comments/">
+		<input type="text" id="comment" name="comment[text]" value="" placeholder="Comentario"/> 
+		<button type="submit"> Comentar </button>
 	</form>
 </p> 

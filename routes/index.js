@@ -20,6 +20,7 @@ router.get('/author', function(req, res, next) {
 //Autoload de rutas que usen :quizId
 router.param('quizId', quizController.load); //autoload :quizId
 router.param('userId', userController.load);  // autoload :userId
+router.param('commentId', commentController.load);	// Autoload :commentId
 
 // Definición de rutas de sesion
 router.get('/session',    sessionController.new);     // formulario login
@@ -48,5 +49,6 @@ router.delete('/quizes/:quizId(\\d+)', sessionController.loginRequired, quizCont
 /* Definición de rutas de comments */
 router.get('/quizes/:quizId(\\d+)/comments/new', sessionController.loginRequired, commentController.new);
 router.post('/quizes/:quizId(\\d+)/comments', sessionController.loginRequired, commentController.create);
+router.put('/quizes/:quizId(\\d+)/comments/:commentId(\\d+)/accept', sessionController.loginRequired, commentController.accept);
 
 module.exports = router;

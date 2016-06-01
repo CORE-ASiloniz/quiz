@@ -45,7 +45,8 @@ exports.index= function(req, res, next){
 // GET /quizes/:id
 exports.show = function(req, res, next){
 	console.log("quiz_controller: estoy atendiendo show");
-	models.Quiz.findById(req.params.quizId).then(function(quiz){
+	//models.Quiz.findById(req.params.quizId).then(function(quiz){
+		var quiz = req.quiz;
 		console.log("quiz_controller: estoy en function(quiz)");
 		if(quiz){
 		if(req.params.format === 'json') {
@@ -63,7 +64,7 @@ exports.show = function(req, res, next){
 		else{
 			throw new Error('No hay preguntas en la BBDD.');
 		}
-	}).catch(function(error){next(error);});
+	//}).catch(function(error){next(error);});
 };
 
 // GET /quizes/check
