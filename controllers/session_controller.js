@@ -1,28 +1,53 @@
 var userController = require('./user_controller');
+var Sequelize = require('sequelize');
+var url = require('url');
+var models = require('../models');
 
+
+var authenticate = function(login, password) {
+    
+    return models.User.findOne({where: {username: login}})
+        .then(function(user) {
+            if (user && user.verifyPassword(password)) {
+                return user;
+            } else {
+                return null;
+            }
+        });
+}; 
 
 // GET /session   -- Formulario de login
 exports.new = function(req, res, next) {
-    res.render('session/new');
-};
 
+    var redir = req.query.redir || 
+                url.parse(req.headers.referer || "/").pathname;
+
+    // No volver al formulario de login ni al de registro.
+    if (redir === '/session' || redir === '/users/new') {
+        redir = "/";
+    }
+
+    res.render('session/new', { redir: redir });
+};
 
 // POST /session   -- Crear la sesion si usuario se autentica
 exports.create = function(req, res, next) {
-
+    var redir = req.body.redir || '/';
     var login     = req.body.login;
     var password  = req.body.password;
 
-    userController.autenticar(login, password)
-        .then(function(user) {
+    authenticate(login, password).then(function(user) {
+          if (user) {
+              // Crear req.session.user y guardar campos id y username
+              // La sesión se define por la existencia de: req.session.user
+              req.session.user = {id:user.id, username:user.username, isAdmin:user.isAdmin};
 
-	        // Crear req.session.user y guardar campos id y username
-	        // La sesión se define por la existencia de: req.session.user
-	        req.session.user = {id:user.id, username:user.username};
-
-	        res.redirect("/"); // redirección a la raiz
-		})
-		.catch(function(error) {
+                res.redirect(redir); // redirección a redir
+            } else {
+                req.flash('error', 'La autenticación ha fallado. Reinténtelo otra vez.');
+                res.redirect("/session?redir="+redir);
+            }
+    }).catch(function(error) {
             req.flash('error', 'Se ha producido un error: ' + error);
             res.redirect("/session");        
     });
