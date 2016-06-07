@@ -41,18 +41,22 @@ app.use(function(req, res, next) {
 });
 
 app.use(function(req, res, next) {
-  if(req.session.user){
-    if((Date.now() - req.session.user.expires) < 120000){
-      req.session.user.expires = Date.now();
-    } else {
+  if(req.session.user) {
+    var timeout = 120000;
+    var tiempoInactivo = +(new Date()) - req.session.user.inicio;
+    if(tiempoInactivo >= timeout ) {
       delete req.session.user;
-      req.flash('error', 'La sesión ha expirado.');
+      req.flash('error', 'Vuelva a iniciar sesión, ha sido expulsado por inactividad. Tiempo en segundos:'+(tiempoInactivo/1000));
+      next();
+    } else {
+      req.session.user.inicio = +(new Date());
+      next();
     }
+  } else {
+    next();
   }
-
-  next();
 });
- 
+
 app.use('/', routes);
 app.use(sessionController.autologout);
 
