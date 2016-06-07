@@ -2,7 +2,11 @@ var userController = require('./user_controller');
 var Sequelize = require('sequelize');
 var url = require('url');
 var models = require('../models');
+<<<<<<< HEAD
 var timeout = 120000;
+=======
+var timeout = 100;
+>>>>>>> Autologout
 
 var authenticate = function(login, password) {
     
@@ -40,12 +44,18 @@ exports.create = function(req, res, next) {
           if (user) {
               // Crear req.session.user y guardar campos id y username
               // La sesión se define por la existencia de: req.session.user
+<<<<<<< HEAD
 
               var timeExp = Date.now() + timeout;
 
               req.session.user = {id:user.id, username:user.username, isAdmin:user.isAdmin, expires: Date.now()};
 
                 res.redirect(redir); // redirección a redir
+=======
+              //var timeExp = Date.now() + timeout;
+              req.session.user = {id:user.id, username:user.username, isAdmin:user.isAdmin, inicio:+(new Date())};
+              res.redirect(redir); // redirección a redir
+>>>>>>> Autologout
             } else {
                 req.flash('error', 'La autenticación ha fallado. Reinténtelo otra vez.');
                 res.redirect("/session?redir="+redir);
