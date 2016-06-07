@@ -2,7 +2,7 @@ var userController = require('./user_controller');
 var Sequelize = require('sequelize');
 var url = require('url');
 var models = require('../models');
-var timeout = 12000;
+var timeout = 120000;
 
 var authenticate = function(login, password) {
     
@@ -65,7 +65,7 @@ exports.destroy = function(req, res, next) {
     res.redirect("/session"); // redirect a login
 };
 
-exports.autologout = function(req, res, next){
+/*exports.autologout = function(req, res, next){
  if(req.session.user) {
    if(req.session.user.timeExp >= Date.now()){
      req.session.user.timeExp = Date.now() + timeout;
@@ -75,7 +75,7 @@ exports.autologout = function(req, res, next){
    }   
  }
  next();
-};
+};*/
 
 exports.loginRequired = function(req, res, next) {
    if(req.session.user) {

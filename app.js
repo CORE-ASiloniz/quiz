@@ -19,6 +19,19 @@ var app = express();
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
+// En produccion (Heroku) redirijo las peticiones http a https.
+// Documentacion: http://jaketrent.com/post/https-redirect-node-heroku/
+if (app.get('env') === 'production') {
+    app.use(function(req, res, next) {
+        if (req.headers['x-forwarded-proto'] !== 'https') {
+            res.redirect('https://' + req.get('Host') + req.url);
+        } else { 
+            next(); // Continue to other routes if we're not redirecting 
+        }
+    });
+}
+
+
 
 // uncomment after placing your favicon in /public
 app.use(favicon(__dirname + '/public/favicon.ico'));
@@ -54,7 +67,7 @@ app.use(function(req, res, next) {
 });
 
 app.use('/', routes);
-app.use(sessionController.autologout);
+//app.use(sessionController.autologout);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
