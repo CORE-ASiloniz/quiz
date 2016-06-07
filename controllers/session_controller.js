@@ -84,3 +84,29 @@ exports.loginRequired = function(req, res, next) {
        res.redirect('/session/redir=' + (req.param('redir') || req.url));
    }
 }; 
+
+exports.adminOrMyselfRequired = function(req, res, next) {
+  var isAdmin = req.session.user.isAdmin;
+  var userId = req.userId;
+  var loggedUserId = req.session.user.id;
+
+  if(isAdmin || (userId === loggedUserId)) {
+    next();
+  } else {
+    console.log('Ruta prohibida: No es el usuario logueado, ni un administrador.');
+    res.send(403);
+  }
+};
+
+exports.adminAndNotMyselfRequired = function(req, res, next) {
+  var isAdmin = req.session.user.isAdmin;
+  var userId = req.userId;
+  var loggedUserId = req.session.user.id;
+
+  if(isAdmin && (userId !== loggedUserId)) {
+    next();
+  } else {
+    console.log('Ruta prohibida: No es el usuario logueado, ni un administrador.');
+    res.send(403);
+  }
+};

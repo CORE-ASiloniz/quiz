@@ -141,6 +141,7 @@ exports.destroy = function(req, res, next) {
         });
 };
 
+
 /*
  * Autenticar un usuario: Comprueba si el usuario esta registrado en users
  *
