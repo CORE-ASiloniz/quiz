@@ -89,7 +89,9 @@ exports.show = function(req, res, next){
 				res.send(texto);
 			} else {
 				var answer = req.query.answer || '';
-				res.render('quizes/show', {quiz: quiz, answer: answer});
+				models.User.findAll({order: ['username']}).then(function(users){
+				res.render('quizes/show', {quiz: quiz, answer: answer, users: users});	
+			});
 			}
 		}
 		else{
