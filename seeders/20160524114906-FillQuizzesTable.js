@@ -16,4 +16,4 @@ module.exports = {
   down: function (queryInterface, Sequelize) {
       return queryInterface.bulkDelete('Quizzes', null, {});
   }
-}; 
+};
